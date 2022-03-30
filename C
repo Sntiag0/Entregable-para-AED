@@ -1,0 +1,16 @@
+#CALCULATES THE VALUE OF A MATHEMATIC EXPRESSION
+
+def mi_lista(expression):               #Transforms what B returned into a list
+    lista=[]
+    for i in range(expression.size()):
+        aux=expression.dequeue()
+        lista.append(aux)
+    return lista
+
+def calculator(milista):                #First transforms every character into str, then joins all the characters
+    ayuda = mi_lista(milista)           #and finally returns the value for the expression
+    str_prep=[]
+    for e in ayuda:
+        str_transformer=str(e)
+        str_prep.append(str_transformer)
+    return eval("".join(str_prep))
