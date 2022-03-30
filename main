@@ -1,0 +1,67 @@
+from A import transformador
+from B import conector
+from C import calculator
+from Queue import Queue as q
+import os
+
+if __name__=="__main__":
+    print('This program will calculate the maximum values for\
+            \n a given expression at a set of given points')
+    print('=====================================================')
+
+    input_expression1 = str(input('Please, enter a well-defined expression: '))                 #Inputs
+    datafile = input('Enter the name of the file containing the points to be processed: ')
+    maximun = int(input('Please, enter the number of maximal values for the expression: '))
+    try:                                                                                     #Reading of data reference
+        input_file = open(datafile, 'r')
+        string = ''
+        numbers = []
+        char = input_file.read(1)
+        while char != '':
+            if char == ',':
+                num = float(string)
+                numbers.append(num)
+                char = input_file.read(1)
+                string = ''
+            else:
+                string += char
+            char = input_file.read(1)
+        input_file.close()
+
+        values1 = q()
+        values2 = []
+        for i in range(0, len(numbers), 5):  # Enqueue the data in tuples of size 5
+            values1.enqueue((numbers[i], numbers[i + 1], numbers[i + 2], numbers[i + 3], numbers[i + 4]))
+            values2.append((numbers[i], numbers[i + 1], numbers[i + 2], numbers[i + 3], numbers[i + 4]))
+        results = []
+        for i in range(values1.size()):  # Mixes the expression with the values and operates them
+            valor = values1.dequeue()
+            aux1 = transformador(input_expression1)
+            aux2 = conector(aux1, valor)
+            aux3 = calculator(aux2)
+            results.append([aux3, i])
+
+        for i in range(len(results)):  #Sort the results in a decrescent order maintaining the original order
+            for j in range(i + 1, len(results)):
+                if results[i][0] < results[j][0]:   #quicksort
+                    x = results[j][0]
+                    y = results[j][1]
+                    results[j][0] = results[i][0]
+                    results[j][1] = results[i][1]
+                    results[i][0] = x
+                    results[i][1] = y
+
+        maximun_list = q()
+        for i in range(maximun):        #Enqueues the maximuns results and their position
+            maximun_list.enqueue((results[i][0], results[i][1]))
+
+        what_i_print = q()              #Prints out the values that reach the maximun value and also that value
+        for i in range(maximun_list.size()):
+            auxiliar = maximun_list.dequeue()
+            for index in range(len(values2)):
+                if auxiliar[1] == index:
+                    what_i_print.enqueue((auxiliar[0], values2[index]))
+        print(what_i_print)
+
+    except IOError:
+        print('File does not exist')
