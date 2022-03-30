@@ -1,0 +1,49 @@
+#TRANSFORMS THE EXPRESSION AND VALIDATES IT
+
+from Queue import Queue as q
+
+operators_dict = {'+': 0, '-': 0, '*': 0, '/': 0, '^': 1}
+variables_dict = {'a': 0, 'b': 1, 'c': 2, 'd': 3, 'e': 4}
+
+def transformador(expression):
+
+    lista = q()
+
+    counter1 = 0                                                        #parentesis
+    counter2 = 0                                                        #operators
+    counter3 = 0                                                        #variables
+
+    for e in expression:                                        #A queue is used to store the values of the expression
+        if e.isdigit() == True or e.isalpha() == True:
+            lista.enqueue(e)
+        elif e in operators_dict:
+            if operators_dict[e]==1:
+                lista.enqueue('**')
+            else:
+                lista.enqueue(e)
+        elif e == '(':
+            lista.enqueue(e)
+            counter1 += 1
+        elif e == ')':
+            lista.enqueue(e)
+            counter1 -= 1
+
+    if lista.size() < 3:                                    #First requirement that the expression has to validate
+        return ValueError('Size error in expression')
+
+    for e in expression:                                    #Requirements that the expression has to validate
+        if e in variables_dict.keys():
+            counter3 +=1
+        if e.isdigit():
+            counter3 +=1
+        if e in operators_dict.keys():
+            counter2 +=1
+
+    if counter1 != 0:                                           #Errors if the expression is not correct
+        raise ValueError('Parenthesis error in expression')
+    if counter2 == 0:
+        raise ValueError('Operator error in expression')
+    if counter3<2:
+        raise ValueError('Variable error in expression')
+
+    return lista
