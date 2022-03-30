@@ -1,0 +1,36 @@
+#CHANGES THE VARIABLES OF THE EXPRESSION INTO THE VALUES THAT IT RECIEVE
+
+from Queue import Queue as q
+
+variables_dict = {'a': None, 'b': None, 'c': None, 'd': None, 'e': None}
+
+def conector(expression1,value):        #Expression1 is the expression that has been transformed into a queue before
+
+    valores = q()
+
+    for i in range(expression1.size()) :     #Returns an expression with only numbers, ready to be calculated
+
+        ayuda = expression1.dequeue()
+
+        if ayuda in variables_dict.keys():                  #Tranforms the variables into values
+
+            if ayuda == 'a':
+                variables_dict[ayuda] = value[0]
+                valores.enqueue(value[0])
+            if ayuda == 'b':
+                variables_dict[ayuda] = value[1]
+                valores.enqueue(value[1])
+            if ayuda == 'c':
+                variables_dict[ayuda] = value[2]
+                valores.enqueue(value[2])
+            if ayuda == 'd':
+                variables_dict[ayuda] = value[3]
+                valores.enqueue(value[3])
+            if ayuda == 'e':
+                variables_dict[ayuda] = value[4]
+                valores.enqueue(value[4])
+
+        else:
+            valores.enqueue(ayuda)
+
+    return valores
